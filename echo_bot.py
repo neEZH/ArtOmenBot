@@ -44,8 +44,8 @@ def getMessageInfo(message):
         thumbUrl = rsp['data'][lastId]['cover']['thumb_url']
 
         bot.send_photo(chatID, thumbUrl, artUrl)
-    #except IndexError as exp:
-    #    bot.send_message(chatID, 'Добавь Ник художника: "/get ArtistName"')
+    except IndexError as exp:
+        bot.send_message(chatID, 'Добавь Ник художника: "/get ArtistName"')
     except Exception as exp:
         bot.send_message(chatID, "Error: " + str(exp))
 
