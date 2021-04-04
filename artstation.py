@@ -57,8 +57,8 @@ class AS:
     @staticmethod
     def findArtist(query="", perPage="5"):
         url = "https://www.artstation.com/api/v2/search/users.json"
-        # try:
-        req = {"page": 1, "per_page": int(perPage), "query": str(query)}
-        return json.loads(requests.get(url, json=req).text)["data"]
-        # except Exception:
-        #     return {"error": str(Exception)}
+        try:
+            req = {"page": 1, "per_page": int(perPage), "query": str(query)}
+            return json.loads(requests.get(url, json=req).text)["data"]
+        except Exception:
+            return {"error": str(Exception)}

@@ -1,6 +1,4 @@
 import telebot
-import requests
-import json
 import os
 from artstation import AS
 
@@ -35,7 +33,6 @@ def showLastWork(message):
                 projUrl = lastProjs['permalink']
                 thumbUrl = lastProjs['cover']['small_square_url']
                 print("thumbUrl: " + thumbUrl)
-                # bot.send_message(chatID, thumbUrl)
                 bot.send_photo(chatID, str(thumbUrl), str(projUrl))
             else:
                 bot.send_message(chatID, "There are no any project for this artist")
@@ -46,11 +43,7 @@ def showLastWork(message):
             print("before sending")
             print(answer)
             bot.send_message(chatID, answer, parse_mode="HTML")
-
     else:
-
-        print("Checkpoint 7")
-
         bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
 
 
