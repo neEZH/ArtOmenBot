@@ -31,47 +31,55 @@ def showLastWork(message):
         artist = AS(text[1])
         if artist.ifArtist:
             if artist.ifProjs:
-                projUrl = artist.lastArt['permalink']
-                thumbUrl = artist.lastArt['cover']['thumb_url']
-                bot.send_photo(chatID, thumbUrl, projUrl)
+                lastProjs = artist.lastArt
+                projUrl = lastProjs['permalink']
+                thumbUrl = lastProjs['cover']['small_square_url']
+                print("thumbUrl: " + thumbUrl)
+                # bot.send_message(chatID, thumbUrl)
+                bot.send_photo(chatID, str(thumbUrl), str(projUrl))
             else:
                 bot.send_message(chatID, "There are no any project for this artist")
         else:
             answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be it is someone like:"
             for candidate in AS.findArtist(artist.name):
                 answer += "\n" + candidate["username"]
+            print("before sending")
+            print(answer)
             bot.send_message(chatID, answer, parse_mode="HTML")
 
     else:
+
+        print("Checkpoint 7")
+
         bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
 
 
 # @bot.message_handler(commands=['get'])
 # def getMessageInfo(message):
-#
+#     chatID = message.chat.id
 #
 #     try:
-#         artistName = message.text.split(" ")[1]
-#         url = "https://www.artstation.com/users/" + artistName + "/projects.json"
+#          artistName = message.text.split(" ")[1]
+#          url = "https://www.artstation.com/users/" + artistName + "/projects.json"
 #
-#         rsp = json.loads(requests.get(url).text)
+#          rsp = json.loads(requests.get(url).text)
 #
-#         lastPubl = ""
-#         lastId = 0
-#         artId = 0
-#         for artWork in rsp['data']:
-#             if lastPubl < artWork['published_at']:
-#                 lastPubl = artWork['published_at']
-#                 lastId = artId
-#             artId += 1
-#         artUrl = rsp['data'][lastId]['permalink']
-#         thumbUrl = rsp['data'][lastId]['cover']['thumb_url']
+#          lastPubl = ""
+#          lastId = 0
+#          artId = 0
+#          for artWork in rsp['data']:
+#              if lastPubl < artWork['published_at']:
+#                  lastPubl = artWork['published_at']
+#                  lastId = artId
+#              artId += 1
+#          artUrl = rsp['data'][lastId]['permalink']
+#          thumbUrl = rsp['data'][lastId]['cover']['thumb_url']
 #
-#         bot.send_photo(chatID, thumbUrl, artUrl)
+#          bot.send_photo(chatID, thumbUrl, artUrl)
 #     except IndexError as exp:
-#         bot.send_message(chatID, 'Добавь Ник художника: "/get ArtistName"')
+#          bot.send_message(chatID, 'Добавь Ник художника: "/get ArtistName"')
 #     except Exception as exp:
-#         bot.send_message(chatID, "Error: " + str(exp))
+#          bot.send_message(chatID, "Error: " + str(exp))
 
 
 print("Bot starting!!")

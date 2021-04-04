@@ -5,10 +5,13 @@ import json
 class AS:
     def __init__(self, name):
         self.__name = name
+        print(f"Created AS object [" + self.__name + "]")
 
     @property
     def name(self):
         return self.__name
+
+
     @property
     def projsURL(self):
         return "https://www.artstation.com/users/" + str(self.__name) + "/projects.json"
@@ -17,26 +20,29 @@ class AS:
     def ifArtist(self):
         url = self.projsURL
         data = requests.get(url).text
+        print("ifArtist:" + str(bool(data)))
         return bool(data)
 
     @property
     def ifProjs(self):
+        print("ifProjs:" + str(bool(self.getProjs)))
         return bool(self.getProjs)
 
     @property
     def getProjs(self):
         url = self.projsURL
-
         # returns array
         return json.loads(requests.get(url).text)["data"]
 
     @property
     def lastArt(self):
-        maxPublDate = max([project["published_at"] for project in self.getProjs])
         projList = self.getProjs
+        maxPublDate = max([project["published_at"] for project in projList])
+        lastProj = next(project for project in projList if project["published_at"] == maxPublDate)
+        print("Link: " + str(lastProj["permalink"]))
 
         # returns object
-        return next(project for project in projList if project["published_at"] == maxPublDate)
+        return lastProj
 
     @staticmethod
     def findWork(query="", perPage="5"):
