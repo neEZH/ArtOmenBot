@@ -2,9 +2,8 @@ import telebot
 import requests
 import json
 import os
-import sys
-
-# https://www.artstation.com/users/[artistName]/projects.json
+from artstation import AS
+from artstation import Omen
 
 bot = telebot.TeleBot(os.environ['botToken'])
 
@@ -51,5 +50,4 @@ def getMessageInfo(message):
 
 
 print("Bot starting!!")
-sys.stdout.write("Log: Start")
 bot.polling(none_stop=True)
