@@ -3,7 +3,6 @@ import requests
 import json
 import os
 from artstation import AS
-from artstation import Omen
 
 bot = telebot.TeleBot(os.environ['botToken'])
 
