@@ -9,7 +9,7 @@ def logMsg(msg):
     log = "ChatID:" + str(msg.chat.id) + "\n"
     log += "MessageID:" + str(msg.message_id) + "\n"
     log += "From:" + str(msg.from_user.id) + " [" + str(msg.from_user.username) + "]" + "\n"
-    log += "Text:" + str(msg.text.split(" ")) + "\n"
+    log += "Text:" + str(msg.text.split(" "))
     print(log)
     return msg.text.split(" ")
 
@@ -27,17 +27,7 @@ def showLastWork(message):
     chatID = message.chat.id
     print("/last TRIGGERED")
     text = logMsg(message)
-    if aob.lengthCheck(text, 2):
-        artist = AS(text[1])
-        if artist.ifArtist:
-            lastArt = aob.getLastArt(artist)
-            bot.send_photo(chatID, lastArt["thumbUrl"], lastArt["projUrl"])
-        else:
-            answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be you meant:"
-            markup = aob.searchToKeyboard(artist.name)
-            bot.send_message(chatID, answer, reply_markup=markup, parse_mode="HTML")
-    else:
-        bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
+    aob.correctLast(bot, chatID, text)
 
 
 @bot.callback_query_handler(func=lambda call: True)
