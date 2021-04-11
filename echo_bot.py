@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 import os
 from artstation import AS
 
@@ -24,6 +25,7 @@ def send_welcome(message):
 def showLastWork(message):
     chatID = message.chat.id
     print("/last TRIGGERED")
+    print(type(message))
     text = logMsg(message)
     if len(message.text.split(" ")) == 2:
         artist = AS(text[1])
@@ -35,16 +37,34 @@ def showLastWork(message):
                 print("thumbUrl: " + thumbUrl)
                 bot.send_photo(chatID, str(thumbUrl), str(projUrl))
             else:
-                bot.send_message(chatID, "There are no any project for this artist")
+                bot.send_message(chatID, "Can\'t find any project for this artist")
         else:
-            answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be it is someone like:"
+            answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be you meant:"
+            markup = types.InlineKeyboardMarkup(row_width=1)
+
             for candidate in AS.findArtist(artist.name):
-                answer += "\n" + candidate["username"]
-            print("before sending")
-            print(answer)
-            bot.send_message(chatID, answer, parse_mode="HTML")
+                name = candidate["username"]
+                markup.add(types.InlineKeyboardButton(text=name, callback_data=name))
+            bot.send_message(chatID, answer, reply_markup=markup, parse_mode="HTML")
     else:
         bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
+
+@bot.callback_query_handler(func=lambda call: True)
+def callLastWork(callBack):
+    print("gotcha,", callBack.data)
+    callBack.message.text = "last " + str(callBack.data)
+    showLastWork(callBack.message)
+
+
+@bot.message_handler(commands=['a'])
+def aa(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    button = types.InlineKeyboardButton(text="a", callback_data="a")
+    markup.add(button)
+    markup.add(button)
+    markup.add(button)
+
+    bot.send_message(message.chat.id, "hello there", reply_markup=markup)
 
 
 # @bot.message_handler(commands=['get'])

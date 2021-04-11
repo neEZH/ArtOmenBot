@@ -5,6 +5,7 @@ import json
 class AS:
     def __init__(self, name):
         self.__name = name
+        self.__projs = self.getProjs
         print(f"Created AS object [" + self.__name + "]")
 
     @property
@@ -18,15 +19,13 @@ class AS:
 
     @property
     def ifArtist(self):
-        url = self.projsURL
-        data = requests.get(url).text
-        print("ifArtist:" + str(bool(data)))
-        return bool(data)
+        print("ifArtist:" + str(bool(self.__projs)))
+        return bool(self.__projs)
 
     @property
     def ifProjs(self):
         print("ifProjs:" + str(bool(self.getProjs)))
-        return bool(self.getProjs)
+        return bool(self.__projs)
 
     @property
     def getProjs(self):
