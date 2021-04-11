@@ -2,16 +2,7 @@ import telebot
 from telebot import types
 import os
 import aob
-from artstation import AS
-
-
-def logMsg(msg):
-    log = "ChatID:" + str(msg.chat.id) + "\n"
-    log += "MessageID:" + str(msg.message_id) + "\n"
-    log += "From:" + str(msg.from_user.id) + " [" + str(msg.from_user.username) + "]" + "\n"
-    log += "Text:" + str(msg.text.split(" "))
-    print(log)
-    return msg.text.split(" ")
+#from artstation import AS
 
 
 bot = telebot.TeleBot(os.environ['botToken'])
@@ -26,7 +17,7 @@ def sendWelcome(message):
 def showLastWork(message):
     chatID = message.chat.id
     print("/last TRIGGERED")
-    text = logMsg(message)
+    text = aob.logMsg(message)
     aob.correctLast(bot, chatID, text)
 
 

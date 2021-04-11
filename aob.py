@@ -2,6 +2,15 @@ from artstation import AS
 from telebot import types
 
 
+def logMsg(msg):
+    log = "ChatID:" + str(msg.chat.id) + "\n"
+    log += "MessageID:" + str(msg.message_id) + "\n"
+    log += "From:" + str(msg.from_user.id) + " [" + str(msg.from_user.username) + "]" + "\n"
+    log += "Text:" + str(msg.text.split(" "))
+    print(log)
+    return msg.text.split(" ")
+
+
 def msgLenCheck(textArr, target=1):
     if len(textArr) >= target:
         return True
