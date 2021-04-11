@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import os
 import aob
-#from artstation import AS
+from artstation import AS
 
 
 bot = telebot.TeleBot(os.environ['botToken'])
@@ -18,14 +18,16 @@ def showLastWork(message):
     chatID = message.chat.id
     print("/last TRIGGERED")
     text = aob.logMsg(message)
-    aob.correctLast(bot, chatID, text)
+    aob.correctLast(bot, chatID, text, nameI=1, textLen=2)
 
 
 @bot.callback_query_handler(func=lambda call: True)
-def callLastWork(callBack):
+def callBackLastWork(callBack):
     print("gotcha,", callBack.data)
-    callBack.message.text = "last " + str(callBack.data)
-    showLastWork(callBack.message)
+    artist = AS(callBack.data)
+    chatID = callBack.message.chat.id
+    aob.sendLastWork(bot, chatID, artist)
+
 
 
 @bot.message_handler(commands=['a'])

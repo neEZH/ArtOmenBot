@@ -36,12 +36,13 @@ def searchToKeyboard(name):
     return markup
 
 
-def correctLast(bot, chatID, text):
-    if msgLenCheck(text, 2):
-        artist = AS(text[1])
-        sendLastWork(bot, artist, chatID)
+def correctLast(bot, chatID, text, nameI=0, textLen=1):
+    if msgLenCheck(text, textLen):
+        artist = AS(text[nameI])
+        sendLastWork(bot, chatID, artist )
     else:
         bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
+
 
 def sendLastWork(bot, chatID, artist):
     if artist.ifArtist:
