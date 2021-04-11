@@ -23,23 +23,19 @@ class AS:
         return bool(self.__projs)
 
     @property
-    def ifProjs(self):
-        print("ifProjs:" + str(bool(self.getProjs)))
-        return bool(self.__projs)
-
-    @property
     def getProjs(self):
         url = self.projsURL
         # returns array
-        return json.loads(requests.get(url).text)["data"]
+        if requests.get(url).text:
+            return json.loads(requests.get(url).text)["data"]
+        else:
+            return False
 
     @property
     def lastArt(self):
-        projList = self.getProjs
+        projList = self.__projs
         maxPublDate = max([project["published_at"] for project in projList])
         lastProj = next(project for project in projList if project["published_at"] == maxPublDate)
-        print("Link: " + str(lastProj["permalink"]))
-
         # returns object
         return lastProj
 

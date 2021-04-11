@@ -1,13 +1,14 @@
 import telebot
 from telebot import types
 import os
+import aob
 from artstation import AS
 
 
 def logMsg(msg):
     log = "ChatID:" + str(msg.chat.id) + "\n"
     log += "MessageID:" + str(msg.message_id) + "\n"
-    log += "From:" + str(msg.from_user.id) + " ["+str(msg.from_user.username) + "]" + "\n"
+    log += "From:" + str(msg.from_user.id) + " [" + str(msg.from_user.username) + "]" + "\n"
     log += "Text:" + str(msg.text.split(" ")) + "\n"
     print(log)
     return msg.text.split(" ")
@@ -25,29 +26,19 @@ def send_welcome(message):
 def showLastWork(message):
     chatID = message.chat.id
     print("/last TRIGGERED")
-    print(type(message))
     text = logMsg(message)
-    if len(message.text.split(" ")) == 2:
+    if aob.lengthCheck(text, 2):
         artist = AS(text[1])
         if artist.ifArtist:
-            if artist.ifProjs:
-                lastProjs = artist.lastArt
-                projUrl = lastProjs['permalink']
-                thumbUrl = lastProjs['cover']['small_square_url']
-                print("thumbUrl: " + thumbUrl)
-                bot.send_photo(chatID, str(thumbUrl), str(projUrl))
-            else:
-                bot.send_message(chatID, "Can\'t find any project for this artist")
+            lastArt = aob.getLastArt(artist)
+            bot.send_photo(chatID, lastArt["thumbUrl"], lastArt["projUrl"])
         else:
             answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be you meant:"
-            markup = types.InlineKeyboardMarkup(row_width=1)
-
-            for candidate in AS.findArtist(artist.name):
-                name = candidate["username"]
-                markup.add(types.InlineKeyboardButton(text=name, callback_data=name))
+            markup = aob.searchToKeyboard(artist.name)
             bot.send_message(chatID, answer, reply_markup=markup, parse_mode="HTML")
     else:
         bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callLastWork(callBack):
@@ -65,34 +56,6 @@ def aa(message):
     markup.add(button)
 
     bot.send_message(message.chat.id, "hello there", reply_markup=markup)
-
-
-# @bot.message_handler(commands=['get'])
-# def getMessageInfo(message):
-#     chatID = message.chat.id
-#
-#     try:
-#          artistName = message.text.split(" ")[1]
-#          url = "https://www.artstation.com/users/" + artistName + "/projects.json"
-#
-#          rsp = json.loads(requests.get(url).text)
-#
-#          lastPubl = ""
-#          lastId = 0
-#          artId = 0
-#          for artWork in rsp['data']:
-#              if lastPubl < artWork['published_at']:
-#                  lastPubl = artWork['published_at']
-#                  lastId = artId
-#              artId += 1
-#          artUrl = rsp['data'][lastId]['permalink']
-#          thumbUrl = rsp['data'][lastId]['cover']['thumb_url']
-#
-#          bot.send_photo(chatID, thumbUrl, artUrl)
-#     except IndexError as exp:
-#          bot.send_message(chatID, 'Добавь Ник художника: "/get ArtistName"')
-#     except Exception as exp:
-#          bot.send_message(chatID, "Error: " + str(exp))
 
 
 print("Bot starting!!")
