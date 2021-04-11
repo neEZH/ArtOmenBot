@@ -17,7 +17,7 @@ bot = telebot.TeleBot(os.environ['botToken'])
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, f"Hello there")
+    bot.reply_to(message, f"Иди рисуй")
 
 
 @bot.message_handler(commands=['last'])
