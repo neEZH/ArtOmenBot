@@ -5,7 +5,7 @@ import aob
 from artstation import AS
 
 
-bot = telebot.TeleBot('1682078728:AAGFsfgfnIYC-G3Fw0ST0bdLpcqYx9BRa9Y')
+bot = telebot.TeleBot(os.environ['botToken'])
 
 
 @bot.message_handler(commands=['start', 'help'])
