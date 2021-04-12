@@ -1,5 +1,7 @@
 from artstation import AS
 from telebot import types
+import requests
+import json
 
 
 def logMsg(msg):
@@ -52,3 +54,17 @@ def sendLastWork(bot, chatID, artist):
         answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be you meant:"
         markup = searchToKeyboard(artist.name)
         bot.send_message(chatID, answer, reply_markup=markup, parse_mode="HTML")
+
+
+def colormindPalete(model):
+    url = "http://colormind.io/api/"
+    raw_data = '{"model":"'+model+'"}'
+    response = requests.get(url, data=raw_data)
+    return json.loads(response.text)["result"]
+
+
+def getPalette(bot, chatID, palette):
+    msg = "Your palette (RGB):\n"
+    for color in palette:
+        msg += str(color) + "\n"
+    bot.send_message(chatID, msg)

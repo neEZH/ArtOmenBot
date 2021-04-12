@@ -5,7 +5,7 @@ import aob
 from artstation import AS
 
 
-bot = telebot.TeleBot(os.environ['botToken'])
+bot = telebot.TeleBot('1682078728:AAGFsfgfnIYC-G3Fw0ST0bdLpcqYx9BRa9Y')
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -28,6 +28,14 @@ def callBackLastWork(callBack):
     chatID = callBack.message.chat.id
     aob.sendLastWork(bot, chatID, artist)
 
+
+@bot.message_handler(commands=['palet'])
+def sendPalette(message):
+    chatID = message.chat.id
+    print("/palet TRIGGERED")
+    aob.logMsg(message)
+    palette =  aob.colormindPalete("default")
+    aob.getPalette(bot, chatID, palette)
 
 
 @bot.message_handler(commands=['a'])
