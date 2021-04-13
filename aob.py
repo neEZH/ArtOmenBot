@@ -76,7 +76,6 @@ def sciPic(hcode):
 
 
 def getPalette(bot, chatID, palette):
-    msg = "Your palette #HEX:\n"
-    for color in palette:
-        msg += str(color) + "\n"
-    bot.send_message(chatID, msg)
+    imgs = [types.InputMediaPhoto(sciPic(color), color) for color in palette]
+    bot.send_media_group(chatID, imgs)
+    
