@@ -34,8 +34,9 @@ def sendPalette(message):
     chatID = message.chat.id
     print("/palet TRIGGERED")
     aob.logMsg(message)
-    palette =  aob.colormindPalete("default")
-    aob.getPalette(bot, chatID, palette)
+    palette =  aob.colormindPalette("default")
+    hexPalette = aob.hexPalette(palette)
+    aob.getPalette(bot, chatID, hexPalette)
 
 
 @bot.message_handler(commands=['a'])

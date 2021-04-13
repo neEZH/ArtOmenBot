@@ -56,15 +56,27 @@ def sendLastWork(bot, chatID, artist):
         bot.send_message(chatID, answer, reply_markup=markup, parse_mode="HTML")
 
 
-def colormindPalete(model):
+def colormindPalette(model):
     url = "http://colormind.io/api/"
     raw_data = '{"model":"'+model+'"}'
     response = requests.get(url, data=raw_data)
     return json.loads(response.text)["result"]
 
 
+def hexPalette(arr):
+    palette = []
+    for color in arr:
+        palette.append(''.join([hex(part)[2:] for part in color]))
+    return palette
+
+
+def sciPic(hcode):
+    url = "https://singlecolorimage.com/get/" + hcode + "/100x100"
+    return url
+
+
 def getPalette(bot, chatID, palette):
-    msg = "Your palette (RGB):\n"
+    msg = "Your palette #HEX:\n"
     for color in palette:
         msg += str(color) + "\n"
     bot.send_message(chatID, msg)
