@@ -21,6 +21,7 @@ def msgLenCheck(textArr, target=1):
 
 
 def getLastArt(artist):
+    # takes artist[AS] and returns its object with last art project
     lastProjs = artist.lastArt
     projUrl = lastProjs['permalink']
     thumbUrl = lastProjs['cover']['small_square_url']
@@ -30,6 +31,7 @@ def getLastArt(artist):
 
 
 def searchToKeyboard(name):
+    # takes name[STRING] and gets from AS-object array of results of search. and converts array to TG InlineKeyboardMarkup then returns this
     markup = types.InlineKeyboardMarkup(row_width=1)
 
     for candidate in AS.findArtist(name):
@@ -39,14 +41,16 @@ def searchToKeyboard(name):
 
 
 def correctLast(bot, chatID, text, nameI=0, textLen=1):
+    # cheks if /last command was correct. if false -> send info message
     if msgLenCheck(text, textLen):
         artist = AS(text[nameI])
-        sendLastWork(bot, chatID, artist )
+        sendLastWork(bot, chatID, artist)
     else:
         bot.send_message(chatID, "command should be like /last <b>username</b>", parse_mode="HTML")
 
 
 def sendLastWork(bot, chatID, artist):
+    # check if there artist with exactly username. if false -> proposing search results
     if artist.ifArtist:
         lastArt = getLastArt(artist)
         bot.send_photo(chatID, lastArt["thumbUrl"], lastArt["projUrl"])
@@ -57,13 +61,15 @@ def sendLastWork(bot, chatID, artist):
 
 
 def colormindPalette(model):
+    # returns array of "colormind" random palette
     url = "http://colormind.io/api/"
-    raw_data = '{"model":"'+model+'"}'
+    raw_data = '{"model":"' + model + '"}'
     response = requests.get(url, data=raw_data)
     return json.loads(response.text)["result"]
 
 
 def hexPalette(arr):
+    # gets RGB colors[ARRAY[STRING]]. returns array of HEX colors
     palette = []
     for color in arr:
         palette.append(''.join([hex(part)[2:] for part in color]))
@@ -71,11 +77,12 @@ def hexPalette(arr):
 
 
 def sciPic(hcode):
+    # gets hexcode of color[STRING]. returns url[STRING] of "singlecolorimage" service
     url = "https://singlecolorimage.com/get/" + hcode + "/100x100"
     return url
 
 
 def getPalette(bot, chatID, palette):
+    # sends message with palette
     imgs = [types.InputMediaPhoto(sciPic(color), color) for color in palette]
     bot.send_media_group(chatID, imgs)
-    
