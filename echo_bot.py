@@ -3,6 +3,7 @@ from telebot import types
 import os
 import aob
 from artstation import AS
+import pg_database as pgdb
 
 
 bot = telebot.TeleBot(os.environ['botToken'])
@@ -41,13 +42,9 @@ def sendPalette(message):
 
 @bot.message_handler(commands=['a'])
 def aa(message):
-    markup = types.InlineKeyboardMarkup(row_width=1)
-    button = types.InlineKeyboardButton(text="a", callback_data="a")
-    markup.add(button)
-    markup.add(button)
-    markup.add(button)
+    pgdb.dbCheck()
 
-    bot.send_message(message.chat.id, "hello there", reply_markup=markup)
+    bot.send_message(message.chat.id, "DB checked")
 
 
 print("Bot starting!!")

@@ -1,3 +1,4 @@
 PyTelegramBotAPI
 requests
+peewee
 
