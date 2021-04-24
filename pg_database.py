@@ -1,10 +1,12 @@
 import os
 from peewee import *
+from playhouse.db_url import connect
 # import psycopg2
 
 
 DATABASE_URL = os.environ['DATABASE_URL']
-conn = PostgresqlDatabase(DATABASE_URL)
+conn = connect(DATABASE_URL)
+# conn = PostgresqlDatabase(db)
 
 # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
