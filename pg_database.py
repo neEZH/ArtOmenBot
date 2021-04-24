@@ -22,13 +22,12 @@ class Artist(BaseModel):
 
 
 def dbCheck():
-    print(conn.connect())
-    # try:
-    #     #conn.connect()
-    #     #conn.create_tables([Artist])
-    # except Exception as e:
-    #     print(e)
-    # # cursor = conn.cursor()
+    try:
+        conn.connect()
+        conn.create_tables([Artist])
+    except Exception as e:
+        print(e)
+    # cursor = conn.cursor()
     conn.close()
 
 
