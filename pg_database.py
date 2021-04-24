@@ -17,15 +17,38 @@ class BaseModel(Model):
         database = conn
 
 
-class Artist(BaseModel):
+class AOB(BaseModel):
+    class Meta:
+        schema = 'aob'
+
+
+class Artist(AOB):
+    class Meta:
+        table_name = 'Artists'
+
     id = BigAutoField(column_name='id', null=False, primary_key=True)
-    login = CharField(column_name='login', max_length=50)
+    login = CharField(column_name='login', null=False, max_length=50)
+    lastWork = CharField(column_name='lastWork', null=True, max_length=255)
+    lastThumb = CharField(column_name='lastThumb', null=True, max_length=255)
+    lastPost = DateTimeField(column_name='lastPost', null=True)
+
+
+class User(AOB):
+    class Meta:
+        table_name = 'Users'
+
+    id = DoubleField(column_name='tg_id', null=False, primary_key=True)
+    username = DoubleField(column_name='username', null=True)
+    name = CharField(column_name='name', null=False)
+    lastName = CharField(column_name='Last_name', null=True)
+    chatID = DoubleField(column_name='chat_id', null=False)
 
 
 def dbCheck():
     try:
         conn.connect()
-        conn.create_tables([Artist])
+        conn.create_tables([Artist, User])
+
     except Exception as e:
         print(e)
     # cursor = conn.cursor()
