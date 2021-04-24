@@ -2,10 +2,11 @@ import os
 from peewee import *
 import psycopg2
 
-#conn = PostgresqlDatabase(os.environ['DATABASE_URL'])
+# conn = PostgresqlDatabase(os.environ['DATABASE_URL'])
 DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
 
 class BaseModel(Model):
     class Meta:
