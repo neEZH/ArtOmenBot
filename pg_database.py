@@ -1,11 +1,12 @@
 import os
 from peewee import *
-import psycopg2
+# import psycopg2
 
-# conn = PostgresqlDatabase(os.environ['DATABASE_URL'])
+
 DATABASE_URL = os.environ['DATABASE_URL']
+conn = PostgresqlDatabase(DATABASE_URL)
 
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
 class BaseModel(Model):
@@ -19,9 +20,6 @@ class Artist(BaseModel):
 
 
 def dbCheck():
-    print('DB started')
-    print(os.environ['DATABASE_URL'])
-
     print(conn)
     # try:
     #     #conn.connect()
@@ -29,8 +27,6 @@ def dbCheck():
     # except Exception as e:
     #     print(e)
     # # cursor = conn.cursor()
-
-    print('closed')
     conn.close()
 
 
