@@ -44,7 +44,7 @@ class User(AOB):
     chatID = DoubleField(column_name='chat_id', null=False)
 
 
-def dbCheck():
+def createDB():
     try:
         conn.connect()
         conn.create_tables([Artist, User])

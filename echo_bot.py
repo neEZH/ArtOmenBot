@@ -42,10 +42,14 @@ def sendPalette(message):
 
 @bot.message_handler(commands=['a'])
 def aa(message):
-    pgdb.dbCheck()
-
-    bot.send_message(message.chat.id, "DB checked")
+    answ = ""
+    answ += "ChatID: " + str(message.chat.id) + "\n"
+    answ += "ChatType: " + str(message.chat.type) + "\n"
+    answ += "ChatTitle: " + str(message.chat.title) + "\n"
+    # answ += "SenderChatID: " + str(message.sender_chat.id)
+    bot.send_message(message.chat.id, answ)
 
 
 print("Bot starting!!")
+# pgdb.createDB()
 bot.polling(none_stop=True)
