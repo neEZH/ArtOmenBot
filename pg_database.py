@@ -20,7 +20,7 @@ class Artist(BaseModel):
 
 
 def dbCheck():
-    print(conn)
+    print(conn.connect())
     # try:
     #     #conn.connect()
     #     #conn.create_tables([Artist])
