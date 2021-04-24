@@ -1,7 +1,12 @@
 import os
 from peewee import *
+import psycopg2
 
-conn = PostgresqlDatabase(os.environ['DATABASE_URL'])
+#conn = PostgresqlDatabase(os.environ['DATABASE_URL'])
+DATABASE_URL = os.environ['DATABASE_URL']
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
 class BaseModel(Model):
     class Meta:
         database = conn
@@ -13,19 +18,18 @@ class Artist(BaseModel):
 
 
 def dbCheck():
-    print('\nDB started')
+    print('DB started')
     print(os.environ['DATABASE_URL'])
 
     print(conn)
-    print('After classes')
-    try:
-        conn.connect()
-        conn.create_tables([Artist])
-    except Exception as e:
-        print(e)
-    # cursor = conn.cursor()
+    # try:
+    #     #conn.connect()
+    #     #conn.create_tables([Artist])
+    # except Exception as e:
+    #     print(e)
+    # # cursor = conn.cursor()
 
-    print('closed\n')
+    print('closed')
     conn.close()
 
 
