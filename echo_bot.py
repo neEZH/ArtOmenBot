@@ -3,8 +3,8 @@ from telebot import types
 import os
 import aob
 from artstation import AS
-import pg_database as pgdb
-
+from pg_database import createDB
+import DBWorker as DBw
 
 bot = telebot.TeleBot(os.environ['botToken'])
 
@@ -35,21 +35,24 @@ def sendPalette(message):
     chatID = message.chat.id
     print("/palet TRIGGERED")
     aob.logMsg(message)
-    palette =  aob.colormindPalette("default")
+    palette = aob.colormindPalette("default")
     hexPalette = aob.hexPalette(palette)
     aob.getPalette(bot, chatID, hexPalette)
 
 
+@bot.message_handler(commands=['subs'])
+def subscribe(message):
+    chatID = message.chat.id
+    print("/subs TRIGGERED")
+    text = aob.logMsg(message)
+    aob.correctSubs(bot, chatID, text, message.from_user, 1, 2)
+
+
 @bot.message_handler(commands=['a'])
 def aa(message):
-    answ = ""
-    answ += "ChatID: " + str(message.chat.id) + "\n"
-    answ += "ChatType: " + str(message.chat.type) + "\n"
-    answ += "ChatTitle: " + str(message.chat.title) + "\n"
-    # answ += "SenderChatID: " + str(message.sender_chat.id)
-    bot.send_message(message.chat.id, answ)
+    DBw.test()
 
 
 print("Bot starting!!")
-# pgdb.createDB()
+createDB()
 bot.polling(none_stop=True)

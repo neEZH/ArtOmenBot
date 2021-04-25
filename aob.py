@@ -2,6 +2,11 @@ from artstation import AS
 from telebot import types
 import requests
 import json
+import DBWorker
+
+'''
+SOME ADDDITIONAL METHODS
+'''
 
 
 def logMsg(msg):
@@ -20,14 +25,20 @@ def msgLenCheck(textArr, target=1):
         return False
 
 
+'''
+LAST ART METHODS
+'''
+
+
 def getLastArt(artist):
     # takes artist[AS] and returns its object with last art project
     lastProjs = artist.lastArt
     projUrl = lastProjs['permalink']
     thumbUrl = lastProjs['cover']['small_square_url']
+    postDate = lastProjs['published_at']
     print("projUrl: " + projUrl)
     print("thumbUrl: " + thumbUrl)
-    return {"projUrl": projUrl, "thumbUrl": thumbUrl}
+    return {"projUrl": projUrl, "thumbUrl": thumbUrl, "postDate": postDate}
 
 
 def searchToKeyboard(name):
@@ -58,6 +69,37 @@ def sendLastWork(bot, chatID, artist):
         answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!\nMay be you meant:"
         markup = searchToKeyboard(artist.name)
         bot.send_message(chatID, answer, reply_markup=markup, parse_mode="HTML")
+
+
+'''
+SUBSCRIBE METHODS GOES HERE
+'''
+
+
+def correctSubs(bot, chatID, text, user, nameI=0, textLen=1):
+    # cheks if /subs command was correct. if false -> send info message
+    if msgLenCheck(text, textLen):
+        DBWorker.logUser(user.id, user.username, user.first_name, user.last_name)
+        artist = AS(text[nameI])
+        artData = subsArtData(artist)
+        DBWorker.logArtist(artData["name"], artData["lastWork"], artData["lastThumb"], artData["lastDate"])
+        bot.send_message(chatID, "Subscribtion on " + text[nameI] + " done Successful\nSubscribes left:")
+    else:
+        bot.send_message(chatID, "command should be like /subs <b>username</b>", parse_mode="HTML")
+
+
+def subsArtData(artist):
+    if artist.ifArtist:
+        lastArt = getLastArt(artist)
+        return {"name": artist.name, "lastWork": lastArt["projUrl"], "lastThumb": lastArt["thumbUrl"],
+                "lastDate": lastArt["postDate"]}
+    else:
+        answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!"
+
+
+'''
+PALETTE  METHODS STARTS HERE
+'''
 
 
 def colormindPalette(model):
