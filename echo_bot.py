@@ -68,7 +68,6 @@ def artur_text(message):
 def aa(message):
     DBw.test()
 
-
 print("Bot starting!!")
 createDB()
 bot.polling(none_stop=True)

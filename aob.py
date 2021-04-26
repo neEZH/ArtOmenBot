@@ -32,11 +32,15 @@ DISCORD WEBHOOKS
 
 
 def urNotArtur(bot, chatID):
-    bot.send_message(chatID, "Ты не Артур. Ухади.", )
+    bot.send_message(chatID, "Ты не Артур. Ухади.")
+
 
 def ifArtur(func, bot, chatID, userID, text):
-    if userID == 418795514:
-        func(bot, chatID, userID, text)
+    okUsersArr = os.environ['artur'].split(",")
+    okUsersArr = [int(i) for i in okUsersArr]
+    print(type(okUsersArr), okUsersArr)
+    if userID in okUsersArr:
+        func(bot, chatID, text)
     else:
         urNotArtur(bot, chatID)
 
@@ -57,10 +61,6 @@ def discordVid(bot, chatID, text):
         requests.post(url, data=raw_data)
     else:
         bot.send_message(chatID, "command should be like /v <b>https://yoursite.net</b>", parse_mode="HTML")
-
-
-
-# def arturV():
 
 
 '''
