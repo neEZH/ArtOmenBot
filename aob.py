@@ -1,5 +1,6 @@
 from artstation import AS
 from telebot import types
+import os
 import requests
 import json
 import DBWorker
@@ -23,6 +24,43 @@ def msgLenCheck(textArr, target=1):
         return True
     else:
         return False
+
+
+'''
+DISCORD WEBHOOKS
+'''
+
+
+def urNotArtur(bot, chatID):
+    bot.send_message(chatID, "Ты не Артур. Ухади.", )
+
+def ifArtur(func, bot, chatID, userID, text):
+    if userID == 418795514:
+        func(bot, chatID, userID, text)
+    else:
+        urNotArtur(bot, chatID)
+
+
+def discordText(bot, chatID, text):
+    if msgLenCheck(text, 2):
+        raw_data = {"content": str(text[1])}
+        url = os.environ['discord_webhook_text']
+        requests.post(url, data=raw_data)
+    else:
+        bot.send_message(chatID, "command should be like /t <b>https://yoursite.net</b>", parse_mode="HTML")
+
+
+def discordVid(bot, chatID, text):
+    if msgLenCheck(text, 2):
+        raw_data = {"content": str(text[1])}
+        url = os.environ['discord_webhook_vid']
+        requests.post(url, data=raw_data)
+    else:
+        bot.send_message(chatID, "command should be like /v <b>https://yoursite.net</b>", parse_mode="HTML")
+
+
+
+# def arturV():
 
 
 '''

@@ -48,6 +48,22 @@ def subscribe(message):
     aob.correctSubs(bot, chatID, text, message.from_user, 1, 2)
 
 
+@bot.message_handler(commands=['t'])
+def artur_text(message):
+    text = aob.logMsg(message)
+    chatID = message.chat.id
+    userID = message.from_user.id
+    aob.ifArtur(aob.discordText, bot, chatID, userID, text)
+
+
+@bot.message_handler(commands=['v'])
+def artur_text(message):
+    text = aob.logMsg(message)
+    chatID = message.chat.id
+    userID = message.from_user.id
+    aob.ifArtur(aob.discordVid, bot, chatID, userID, text)
+
+
 @bot.message_handler(commands=['a'])
 def aa(message):
     DBw.test()
