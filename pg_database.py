@@ -1,3 +1,5 @@
+"""
+
 import os
 from peewee import *
 from playhouse.db_url import connect
@@ -65,3 +67,4 @@ def createDB():
         print(e)
     # cursor = conn.cursor()
     conn.close()
+"""

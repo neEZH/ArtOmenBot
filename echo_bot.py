@@ -1,10 +1,14 @@
 import telebot
-from telebot import types
+# from telebot import types
 import os
 import aob
 from artstation import AS
-from pg_database import createDB
-import DBWorker as DBw
+import schedule
+import threading
+import time
+
+# from pg_database import createDB
+# import DBWorker as DBw
 
 bot = telebot.TeleBot(os.environ['botToken'])
 
@@ -66,8 +70,50 @@ def artur_text(message):
 
 @bot.message_handler(commands=['a'])
 def aa(message):
-    DBw.test()
+    aob.discordBDay()
+
+
+'''
+    Thread for scheduled actions
+'''
+
+
+def run_continuously(interval=1):
+    cease_continuous_run = threading.Event()
+
+    class ScheduleThread(threading.Thread):
+        @classmethod
+        def run(cls):
+            while not cease_continuous_run.is_set():
+                schedule.run_pending()
+                time.sleep(interval)
+
+    continuous_thread = ScheduleThread()
+    continuous_thread.start()
+    return cease_continuous_run
+
+
+'''
+    SCHEDULED ACTIONS
+'''
+
+
+def birthdayReminder():
+    aob.bDayGreetings(bot)
+
+
+schedule.every().day.at("08:00").do(birthdayReminder)
+stop_run_continuously = run_continuously()
+'''
+    Calling bot polling
+'''
 
 print("Bot starting!!")
-createDB()
+# createDB()
 bot.polling(none_stop=True)
+
+'''
+    Calling thread with scheduler
+'''
+time.sleep(10)
+stop_run_continuously.set()

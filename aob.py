@@ -3,10 +3,12 @@ from telebot import types
 import os
 import requests
 import json
-import DBWorker
+import time
+
+# import DBWorker
 
 '''
-SOME ADDDITIONAL METHODS
+SOME ADDITIONAL METHODS
 '''
 
 
@@ -63,6 +65,12 @@ def discordVid(bot, chatID, text):
         bot.send_message(chatID, "command should be like /v <b>https://yoursite.net</b>", parse_mode="HTML")
 
 
+def discordBDay():
+    raw_data = {"content": str("test call")}
+    url = os.environ['discord_webhook_bday']
+    requests.post(url, data=raw_data)
+
+
 '''
 LAST ART METHODS
 '''
@@ -113,7 +121,7 @@ def sendLastWork(bot, chatID, artist):
 SUBSCRIBE METHODS GOES HERE
 '''
 
-
+'''
 def correctSubs(bot, chatID, text, user, nameI=0, textLen=1):
     # cheks if /subs command was correct. if false -> send info message
     if msgLenCheck(text, textLen):
@@ -133,7 +141,7 @@ def subsArtData(artist):
                 "lastDate": lastArt["postDate"]}
     else:
         answer = "There are no any <b>" + artist.name + "</b> artist on Artstation!"
-
+'''
 
 '''
 PALETTE  METHODS STARTS HERE
@@ -166,3 +174,57 @@ def getPalette(bot, chatID, palette):
     # sends message with palette
     imgs = [types.InputMediaPhoto(sciPic(color), color) for color in palette]
     bot.send_media_group(chatID, imgs)
+
+
+'''
+BIRTHDAY
+'''
+
+
+def discordBday(answer):
+    raw_data = {"content": str(answer)}
+    url = os.environ['discord_webhook_bday']
+    requests.post(url, data=raw_data)
+
+
+
+def getBDayData():
+    data = os.environ["birthday_data"]
+    data = list(eval(data))
+    return data
+
+
+def cDateGet():
+    norm = lambda x: "0" + str(x) if x < 10 else str(x)
+    cDate = norm(time.localtime().tm_mday) + "-" + norm(time.localtime().tm_mon)
+    return cDate
+
+
+def bDayCheckEach(data, cDate, cYear):
+    for i in data:
+        people = []
+        bDay = i["bdate"][0:-5]
+        bYear = i["bdate"][-4:]
+        if cDate == bDay:
+            age = int(cYear) - int(bYear)
+            people.append({"tgLogin": i["tgLogin"], "age": str(age)})
+    return people
+
+
+def checkBday():
+    data = getBDayData()
+    cYear = str(time.localtime().tm_year)
+    cDate = cDateGet()
+    return bDayCheckEach(data, cDate, cYear)
+
+
+def bDayGreetings(bot):
+    chatID = os.environ["localChatId"]
+    people = checkBday()
+    for i in people:
+        answer = "Сегодня день рождения!\n{0} исполняется {1} годиков!".format(i["tgLogin"], i["age"])
+        bot.send_message(chatID, answer, parse_mode="HTML")
+        discordBday(answer)
+
+
+

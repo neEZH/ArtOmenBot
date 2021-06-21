@@ -1,4 +1,4 @@
-from pg_database import Artist
+'''from pg_database import Artist
 from pg_database import User
 from pg_database import Subscribe
 from pg_database import conn
@@ -25,6 +25,7 @@ def logArtist(aLogin, aLastWork, aLastThumb, aLastPost):
     return rows
 
 '''
+'''
 def addSubs(user, artist):
     artistID = Artist.select(Artist.login == artist).dicts
      # HERE should be get ID by name
@@ -40,9 +41,10 @@ def ifSubscribe(user, artist):
     except Exception as e:
         return None
 '''
+'''
 def test():
     sub = User.select()
     xyu = list(sub)
     print(type(xyu))
     print(xyu)
-
+'''
