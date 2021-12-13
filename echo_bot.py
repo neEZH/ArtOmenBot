@@ -73,6 +73,14 @@ def aa(message):
     aob.discordBDay()
 
 
+@bot.message_handler(commands=['idea'])
+def sendIdea(message):
+    text = aob.getIdea()
+    chatID = message.chat.id
+    bot.send_message(chatID, text)
+
+
+
 '''
     Thread for scheduled actions
 '''

@@ -226,5 +226,15 @@ def bDayGreetings(bot):
         bot.send_message(chatID, answer, parse_mode="HTML")
         discordBday(answer)
 
+'''
+RANDOMALL
+idea
+'''
+rndURL = 'https://randomall.ru/api/custom/gens/'
 
+
+def getIdea():
+    genID = "546"
+    result = requests.post(rndURL + genID).text
+    return json.loads(result)['msg']
 
