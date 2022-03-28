@@ -79,6 +79,15 @@ def sendIdea(message):
     chatID = message.chat.id
     bot.send_message(chatID, text)
 
+@bot.message_handler(commands=['dead'])
+def deadInside(message):
+    chatID = message.chat.id
+    result = 1000
+    msgText = ""
+    while result > 0:
+        msgText = "{0}{1} - 7\n".format(msgText, str(result))
+        result = result - 7
+    bot.send_message(chatID, msgText)
 
 
 '''
